@@ -9,7 +9,7 @@
 | 项目 | 要求 |
 |------|------|
 | 操作系统 | Windows 10+ / macOS 10.15+ / Linux (主流发行版) |
-| Python | 3.8 或更高 |
+| Python | 3.8+ |
 | 磁盘空间 | 约 500 MB（Playwright Chromium 浏览器） |
 | 网络 | 能访问 `doubao.com` |
 
@@ -66,7 +66,7 @@ python -c "from playwright.sync_api import sync_playwright; print('OK')"
 
 ## 3. 首次登录（必须）
 
-豆包的网页端需要登录才能使用。**登录态通过 cookies 保存**，本项目**不内置任何 cookies**——你需要登录自己的豆包账号并把 cookies 存到本地。
+豆包网页端需要登录才能使用。**登录态通过 cookies 保存**，本项目**不内置任何 cookies**，需要你自己登录账号并把 cookies 存到本地。
 
 ### 3.1 一键登录保存（推荐）
 
@@ -77,13 +77,13 @@ python tools/save_cookies.py
 脚本会：
 1. 启动一个 Chromium 浏览器窗口
 2. 打开豆包登录页
-3. **你在浏览器中手动登录**（扫码 / 手机号 / 微信 等）
+3. **你在浏览器中手动登录**（扫码 / 手机号 / 微信等）
 4. 脚本检测到登录成功后，自动保存：
    - `cookies.json`（核心登录凭证）
    - `session.json`（localStorage 数据）
 5. 关闭浏览器
 
-整个过程 1~2 分钟。
+整个过程通常 1~2 分钟。
 
 ### 3.2 手动登录保存（备选）
 
@@ -182,6 +182,6 @@ xcode-select --install
 
 ## 下一步
 
-- 📖 查看 [USAGE.md](USAGE.md) 学习所有 API 用法
-- 🍪 查看 [COOKIE_GUIDE.md](COOKIE_GUIDE.md) 深入理解 Cookie 机制
-- 🚀 运行 `python doubao_controller.py` 进入交互模式
+- 查看 [USAGE.md](USAGE.md) 学习所有 API 用法
+- 查看 [COOKIE_GUIDE.md](COOKIE_GUIDE.md) 深入理解 Cookie 机制
+- 运行 `python doubao_controller.py` 进入交互模式

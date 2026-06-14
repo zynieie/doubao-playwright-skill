@@ -89,7 +89,7 @@ browser.is_logged_in() -> bool
 
 检测当前是否已登录。
 
-**策略：** 检查页面是否还有"登录"按钮。
+**判定逻辑：** 检查页面是否还有"登录"按钮。
 - 找不到"登录"按钮 → 已登录
 - 找到"登录"按钮 → 未登录
 
@@ -101,9 +101,10 @@ browser.send_message("你的问题")
 
 向当前对话发送一条文本消息。
 
-**注意：**
-- 消息发送后会清空输入框（防止重复触发）
-- 按 Enter 发送（豆包默认行为）
+**行为细节：**
+- 发送前调用 `wait_for_input_box()`，最多等 10 秒输入框出现
+- `textarea.fill(message)` 后通过 JS 把 value 清空再按 Enter（防止某些场景下重复触发）
+- 不会等待回复，需自行调用 `wait_for_reply()`
 
 ### wait_for_reply(timeout=180)
 
@@ -124,6 +125,10 @@ success, reply = browser.wait_for_reply(timeout=180)
 - **阶段 1（等待响应）**：10 秒内等待"内容由豆包 AI 生成"等标记出现
 - **阶段 2（流式输出）**：标记出现后进入流式检测，连续 15 秒无变化视为输出完成
 
+**完成判定：** 至少 2 个标记 + 连续 15 秒无变化。
+
+**验证码处理：** 检测到验证码时若 `keep_open=True` 则自动循环等待；否则截图到 `captcha.png` 暂停等用户处理。
+
 ### upload_file(file_path)
 
 ```python
@@ -132,11 +137,14 @@ browser.upload_file(r"D:\papers\thesis.pdf")
 
 上传本地文件到豆包。
 
-**实现：** 点击回形针按钮 → 等待 `input[type="file"]` 出现 → 注入文件
+**实现：** 点击回形针按钮 → 等待 `input[type="file"]` 出现 → 注入文件。
+
+**返回：** `bool`，是否成功触发上传（不是"豆包已分析完"）。
 
 **注意：**
 - 上传后需要手动调用 `send_message()` 触发分析
-- 支持任意文件类型（豆包支持的格式）
+- 依赖 SVG path 选择器 `M17.3977` 定位回形针按钮，豆包前端改版可能失效
+- 文件不存在时直接返回 False
 
 ### get_conversations()
 
@@ -185,12 +193,12 @@ for p in previews:
 
 读取前 n 个对话的预览内容。
 
-### URL 管理（重要！）
+### URL 管理
 
-每次启动浏览器默认是"新对话"。**想恢复历史对话？用 URL 管理！**
+每次启动浏览器默认是"新对话"，左侧历史列表经常拿不到。**想恢复历史对话，用 URL 持久化：**
 
 ```python
-# 保存当前对话的 URL
+# 保存当前对话的 URL 到 conversations.json
 browser.save_conversation_url("我的论文讨论")
 
 # 列出已保存的对话
@@ -200,12 +208,14 @@ for i, c in enumerate(convos):
 
 # 跳转到已保存的对话
 browser.switch_to_saved_conversation(0)            # 按索引
-browser.switch_to_saved_conversation("我的论文")     # 按标题
+browser.switch_to_saved_conversation("我的论文")     # 按标题（模糊匹配）
 ```
+
+**注意：** `save_conversation_url(title)` 的 title 不传时会从页面正文前 10 行猜一个，不一定准。
 
 ---
 
-## 交互式控制器（推荐）
+## 交互式控制器
 
 不想写代码？直接用交互式命令行：
 
@@ -234,9 +244,9 @@ python doubao_controller.py
 
 ---
 
-## 最佳实践
+## 实践建议
 
-### ✅ 一次启动，多次操作
+### 一次启动，多次操作
 
 ```python
 # 推荐：保持浏览器打开
@@ -257,7 +267,7 @@ browser.wait_for_reply()
 browser.close()  # 只关一次
 ```
 
-### ❌ 避免反复开关
+### 避免反复开关
 
 ```python
 # 不推荐：每次操作都创建新浏览器
@@ -265,17 +275,17 @@ for task in tasks:
     browser = DoubaoBrowser()
     browser.launch()
     browser.send_message(task)
-    browser.close()  # 反复开关会触发人机验证！
+    browser.close()  # 反复开关会触发人机验证
 ```
 
-### 🔁 处理验证码
+### 处理验证码
 
 如果脚本检测到验证码：
 - 默认会暂停并截图到 `captcha.png`
 - 在浏览器中手动完成验证
 - 完成后脚本会自动继续
 
-### 📁 文件上传后
+### 文件上传后
 
 上传文件后**必须再调用 `send_message()`** 才会让豆包开始分析。
 
@@ -300,7 +310,7 @@ browser.send_message("请分析这个文件")
 - `"快速"`
 - `"图像生成"`
 
-豆包网页结构可能更新，如果这些标记改变了，需要修改 `doubao_core.py` 中的 `markers` 列表。
+豆包网页结构可能更新，如果这些标记改变了，需要修改 `doubao_core.py` 中的 `markers` 列表（在 `wait_for_reply` 方法里）。
 
 ### Q：触发人机验证？
 

@@ -9,24 +9,24 @@
 
 ---
 
-## 📖 项目简介
+## 项目简介
 
-`doubao-playwright-skill` 是一个用 **Playwright + Python** 实现的豆包 AI 浏览器自动化工具。它通过模拟真实浏览器操作，帮你：
+`doubao-playwright-skill` 是一个用 **Playwright + Python** 实现的豆包 AI 浏览器自动化工具。它通过控制一个真实的 Chromium 浏览器，调用豆包网页端：
 
-- ✅ **自动发送消息**并**等待流式回复**
-- ✅ **上传文件**让豆包分析（论文、报告、合同……）
-- ✅ **管理历史对话**（列出、切换、读取、归档）
-- ✅ **URL 持久化**：保存重要对话链接，下次直接跳转
-- ✅ **支持验证码自动检测**
-- ✅ **独立 Profile**：不污染用户 Chrome 数据
+- 自动发送消息并等待流式回复
+- 上传文件让豆包分析（论文、报告、合同等）
+- 管理历史对话：列出、切换、读取、归档
+- 保存重要对话的 URL，下次启动直接跳转
+- 检测页面是否出现验证码
+- 使用独立 Profile 目录，不污染用户 Chrome
 
-典型应用场景：批量文件分析、历史对话归档、自动化调用豆包 AI、CLI 化操作豆包。
+适用场景：批量文件分析、历史对话归档、把豆包塞进自己的脚本或 CLI。
 
-> ⚠️ **免责声明**：本项目**与字节跳动/豆包官方没有任何关联**，仅作为个人效率工具开源分享。请遵守豆包用户协议，不要用于违法违规用途。
+> **免责声明**：本项目**与字节跳动/豆包官方没有任何关联**，仅作为个人效率工具开源分享。请遵守豆包用户协议，不要用于违法违规用途。
 
 ---
 
-## 🚀 5 分钟快速开始
+## 快速开始
 
 ### 1. 安装依赖
 
@@ -76,7 +76,7 @@ browser.close()
 
 ---
 
-## 📂 目录结构
+## 目录结构
 
 ```
 doubao-playwright-skill/
@@ -86,11 +86,11 @@ doubao-playwright-skill/
 ├── .gitignore                # git 忽略规则
 ├── cookies.example.json      # cookies 模板（脱敏）
 │
-├── doubao_core.py            # 🔧 核心库：DoubaoBrowser 类
-├── doubao_controller.py      # 🎮 交互式控制器（推荐入口）
-├── doubao_bot.py             # 📜 早期版本主脚本（保留兼容）
-├── doubao_manager.py         # 📋 轻量版对话管理器
-├── quick_send.py             # ⚡ 快速发送（命令行）
+├── doubao_core.py            # 核心库：DoubaoBrowser 类
+├── doubao_controller.py      # 交互式控制器（推荐入口）
+├── doubao_bot.py             # 早期版本主脚本（保留兼容）
+├── doubao_manager.py         # 轻量版对话管理器
+├── quick_send.py             # 命令行快速发送
 │
 ├── docs/
 │   ├── SETUP.md              # 详细安装与配置
@@ -98,7 +98,7 @@ doubao-playwright-skill/
 │   └── COOKIE_GUIDE.md       # Cookie 获取详解
 │
 ├── examples/
-│   └── basic_chat.py         # 5 行代码极简示例
+│   └── basic_chat.py         # 极简示例
 │
 ├── tools/
 │   └── save_cookies.py       # 一键登录保存 cookies
@@ -108,17 +108,17 @@ doubao-playwright-skill/
 
 ---
 
-## ✨ 核心能力一览
+## 核心能力一览
 
 | 功能 | 方法 | 说明 |
 |------|------|------|
 | 启动浏览器 | `browser.launch()` | 自动加载 cookies |
 | 发送消息 | `browser.send_message(text)` | 文字消息 |
-| 等待回复 | `browser.wait_for_reply(timeout=180)` | 流式检测，3 分钟超时 |
+| 等待回复 | `browser.wait_for_reply(timeout=180)` | 流式检测，默认 180 秒超时 |
 | 上传文件 | `browser.upload_file(path)` | 走回形针按钮 |
 | 列出对话 | `browser.get_conversations()` | 返回带 Element 的列表 |
 | 切换对话 | `browser.switch_to_conversation(idx_or_title)` | 按序号或模糊标题 |
-| 创建对话 | `browser.create_new_conversation()` | |
+| 创建对话 | `browser.create_new_conversation()` | 点击"新对话"按钮 |
 | 读取对话 | `browser.read_current_conversation()` | 提取纯文本 |
 | 批量预览 | `browser.read_conversations_preview(n=5)` | 前 n 个对话的预览 |
 | 保存 URL | `browser.save_conversation_url(title)` | 重要对话标记 |
@@ -128,7 +128,7 @@ doubao-playwright-skill/
 
 ---
 
-## 🎯 典型使用场景
+## 典型使用场景
 
 ### 场景 1：让豆包分析一个 PDF
 ```python
@@ -169,7 +169,7 @@ browser.switch_to_saved_conversation("我的毕业论文讨论")
 
 ---
 
-## 🛠️ 常见问题
+## 常见问题
 
 ### Q：登录后 cookies 过期了怎么办？
 重新运行 `python tools/save_cookies.py`，覆盖 `cookies.json` 即可。
@@ -188,28 +188,28 @@ for c in convs:
 ```
 
 ### Q：能不能集成到其他项目？
-完全可以！直接 `from doubao_core import DoubaoBrowser`，把整个目录作为模块引入即可。
+可以。直接 `from doubao_core import DoubaoBrowser`，把整个目录作为模块引入即可。
 
 更多问题见 [docs/USAGE.md](docs/USAGE.md) 的"常见问题"章节。
 
 ---
 
-## 🤝 贡献
+## 贡献
 
-欢迎 PR / Issue！请注意：
+欢迎 PR / Issue。请注意：
 - 提交前跑通基础示例 `examples/basic_chat.py`
 - 改动核心库 `doubao_core.py` 时同步更新文档
 - 新功能优先在 `tools/` 或 `examples/` 下加示例脚本
 
 ---
 
-## 📜 License
+## License
 
 本项目基于 **Apache-2.0 License** 开源，详见 [LICENSE](LICENSE)。
 
 ---
 
-## ⚠️ 重要声明
+## 重要声明
 
 1. **本项目与豆包/字节跳动官方没有任何关联**，仅作为个人效率工具开源分享。
 2. 使用本工具请遵守[豆包用户协议](https://www.doubao.com/terms)及相关法律法规。
