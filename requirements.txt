@@ -1,0 +1,4 @@
+# Doubao Playwright Skill - 依赖列表
+# Python 3.8+
+
+playwright>=1.40.0

@@ -1,0 +1,98 @@
+# ==========================================
+# 敏感数据（绝对不能提交到 Git）
+# ==========================================
+
+# 登录凭证与会话
+cookies.json
+session.json
+local_storage.json
+
+# 浏览器 Profile（含用户浏览记录、登录态等）
+browser_profile/
+
+# 运行时截图和验证码
+*.png
+!assets/**/*.png
+screenshots/
+captcha.png
+login_status.png
+chat_result.png
+chat_success.png
+captcha_detected.png
+last_reply_raw.txt
+
+# ==========================================
+# Python 通用忽略
+# ==========================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 虚拟环境
+.venv/
+venv/
+env/
+ENV/
+
+# 包管理
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# 测试
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 日志
+*.log
+logs/
+
+# 临时文件
+*.tmp
+*.temp
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+~$*
+
+# 导出的对话记录（隐私）
+conversation_*.md
+chat_history.md
+
+# ==========================================
+# 编辑器 / IDE
+# ==========================================
+
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+.cursor/
+*.code-workspace
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ==========================================
+# 项目特定
+# ==========================================
+
+# 用户导出的对话 URL（个人记录）
+conversations.json
+
+# 测试输出
+test_output/
+playwright-report/
+test-results/
