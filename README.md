@@ -1,6 +1,6 @@
 # Doubao Playwright Skill
 
-> 通过 Playwright 自动化控制豆包 AI 网页端 —— 消息收发、文件上传、对话管理、URL 持久化。
+> Automate the Doubao AI web client via Playwright — messaging, file upload, conversation management, URL persistence. 通过 Playwright 自动化控制豆包 AI 网页端。
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-1.40%2B-green)](https://playwright.dev/)
