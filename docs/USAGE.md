@@ -20,8 +20,8 @@
 ### 1. 准备
 
 确保已完成 [SETUP.md](SETUP.md) 的所有步骤：
-- ✅ 安装依赖
-- ✅ 运行 `python tools/save_cookies.py` 保存登录态
+- 安装依赖
+- 运行 `python tools/save_cookies.py` 保存登录态
 
 ### 2. 第一次运行
 
